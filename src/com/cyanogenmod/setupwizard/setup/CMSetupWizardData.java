@@ -29,6 +29,8 @@ import com.android.internal.telephony.TelephonyIntents;
 import com.cyanogenmod.setupwizard.R;
 import com.cyanogenmod.setupwizard.util.SetupWizardUtils;
 
+import org.cyanogenmod.internal.util.PackageManagerUtils;
+
 import java.util.ArrayList;
 
 public class CMSetupWizardData extends AbstractSetupData {
@@ -68,17 +70,16 @@ public class CMSetupWizardData extends AbstractSetupData {
             pages.add(new MobileDataPage(mContext, this)
                     .setHidden(!isSimInserted() || mMobileDataEnabled));
         }
-        final boolean hasGMS = SetupWizardUtils.hasGMS(mContext);
+        final boolean hasGMS = PackageManagerUtils
+                .isAppInstalled(mContext, "com.google.android.gms");
         if (hasGMS) {
             pages.add(new GmsAccountPage(mContext, this));
         }
         pages.add(new OtherSettingsPage(mContext, this).setHidden(!hasGMS));
         if (SetupWizardUtils.hasFingerprint(mContext) && SetupWizardUtils.isOwner()) {
             pages.add(new FingerprintSetupPage(mContext, this));
-        } else if (SetupWizardUtils.frpEnabled(mContext)) {
-            pages.add(new ScreenLockSetupPage(mContext, this));
         }
-        //pages.add(new CyanogenSettingsPage(mContext, this).setHidden(true));
+        pages.add(new ScreenLockSetupPage(mContext, this));
         pages.add(new CyanogenSettingsPage(mContext, this));
         pages.add(new FinishPage(mContext, this));
         return new PageList(pages.toArray(new SetupPage[pages.size()]));
