@@ -59,7 +59,6 @@ public class SetupWizardApp extends Application {
     public static final String EXTRA_RESULT_CODE = "com.android.setupwizard.ResultCode";
 
     public static final String KEY_DETECT_CAPTIVE_PORTAL = "captive_portal_detection_enabled";
-    public static final String KEY_SEND_METRICS = "send_metrics";
     public static final String DISABLE_NAV_KEYS = "disable_nav_keys";
     public static final String KEY_APPLY_DEFAULT_THEME = "apply_default_theme";
     public static final String KEY_BUTTON_BACKLIGHT = "pre_navbar_button_backlight";

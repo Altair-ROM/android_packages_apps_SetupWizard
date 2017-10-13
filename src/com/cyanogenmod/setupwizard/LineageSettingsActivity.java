@@ -20,7 +20,6 @@ package com.cyanogenmod.setupwizard;
 import static com.cyanogenmod.setupwizard.SetupWizardApp.DISABLE_NAV_KEYS;
 import static com.cyanogenmod.setupwizard.SetupWizardApp.KEY_APPLY_DEFAULT_THEME;
 import static com.cyanogenmod.setupwizard.SetupWizardApp.KEY_PRIVACY_GUARD;
-import static com.cyanogenmod.setupwizard.SetupWizardApp.KEY_SEND_METRICS;
 
 import android.app.Activity;
 import android.content.Context;
@@ -57,23 +56,12 @@ public class LineageSettingsActivity extends BaseSetupWizardActivity {
 
     private SetupWizardApp mSetupWizardApp;
 
-    private View mMetricsRow;
     private View mNavKeysRow;
     private View mPrivacyGuardRow;
-    private CheckBox mMetrics;
     private CheckBox mNavKeys;
     private CheckBox mPrivacyGuard;
 
     private boolean mHideNavKeysRow = false;
-
-    private View.OnClickListener mMetricsClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            boolean checked = !mMetrics.isChecked();
-            mMetrics.setChecked(checked);
-            mSetupWizardApp.getSettingsBundle().putBoolean(KEY_SEND_METRICS, checked);
-        }
-    };
 
     private View.OnClickListener mNavKeysClickListener = new View.OnClickListener() {
         @Override
@@ -122,19 +110,6 @@ public class LineageSettingsActivity extends BaseSetupWizardActivity {
         privacyPolicy.setMovementMethod(LinkMovementMethod.getInstance());
         privacyPolicy.setText(ss);
 
-        mMetricsRow = findViewById(R.id.metrics);
-        mMetricsRow.setOnClickListener(mMetricsClickListener);
-        String metricsHelpImproveCM =
-                getString(R.string.services_help_improve_cm, getString(R.string.os_name));
-        String metricsSummary = getString(R.string.services_metrics_label,
-                metricsHelpImproveCM, getString(R.string.os_name));
-        final SpannableStringBuilder metricsSpan = new SpannableStringBuilder(metricsSummary);
-        metricsSpan.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD),
-                0, metricsHelpImproveCM.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        TextView metrics = (TextView) findViewById(R.id.enable_metrics_summary);
-        metrics.setText(metricsSpan);
-        mMetrics = (CheckBox) findViewById(R.id.enable_metrics_checkbox);
-
         mNavKeysRow = findViewById(R.id.nav_keys);
         mNavKeysRow.setOnClickListener(mNavKeysClickListener);
         mNavKeys = (CheckBox) findViewById(R.id.nav_keys_checkbox);
@@ -163,7 +138,6 @@ public class LineageSettingsActivity extends BaseSetupWizardActivity {
     public void onResume() {
         super.onResume();
         updateDisableNavkeysOption();
-        updateMetricsOption();
         updatePrivacyGuardOption();
     }
 
@@ -196,15 +170,6 @@ public class LineageSettingsActivity extends BaseSetupWizardActivity {
     @Override
     protected int getIconResId() {
         return R.drawable.ic_features;
-    }
-
-    private void updateMetricsOption() {
-        final Bundle myPageBundle = mSetupWizardApp.getSettingsBundle();
-        boolean metricsChecked =
-                !myPageBundle.containsKey(KEY_SEND_METRICS) || myPageBundle
-                        .getBoolean(KEY_SEND_METRICS);
-        mMetrics.setChecked(metricsChecked);
-        myPageBundle.putBoolean(KEY_SEND_METRICS, metricsChecked);
     }
 
     private void updateDisableNavkeysOption() {
